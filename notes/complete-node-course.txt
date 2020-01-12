@@ -1,0 +1,166 @@
+Microprocessors understand only the machine code which is hard for humans to read.
+C/C++ can are closest to microprocessors and hence give us a high degree of control
+Javascript is converted to machine code using V8 Javascript Engine
+V8 Javascript engine is itself written in C++
+Hence NodeJS is also written in C++
+ECMAScript is a standard for Javascript since there are many Javascript Engines
+V8 Javascript Engine is developed by GOOGLE
+V8 was primarily written for CHROME
+NodeJS was created by a company known as JOYENT
+Modules are a reusable block of code
+Function can be declared in two ways
+	1.	function statement	:	function greet(){}
+	2.	function expression	:	var greet = function(){}
+		function statement can be accessed in js code before it is declared but function expression cannot
+require is a function that imports modules 	:	require('./user')
+	First it looks for the mentioned module in node core, then node_modules and then for folder..
+module.exports = {} is accessible to other files via require()
+accessing properties of objects person.name; or person['name'];
+function constructor uses this keyword to create a new object and automatically returns the new object
+object.__proto__ returns the prototype of the object
+
+pass by value, primitive values like strings, numbers are passed by value (copy)
+	function val(a){ a = 2; }						function ref(d){ d.prop1: function(){}, d.prop2: {}}
+	var a = 2; val(a); 	// makes a copy of a		var obj = {prop1: 'hi'}; ref(d);
+	console.log(a);	// returns 1 (a unchanged)		// changes the values of the object
+
+immediately invoked function
+	(function(fname, lname){
+		console.log('Hello', fname, lname);
+	}())
+
+how modules work
+	everything in a module is wrapped in an immediately invoked function
+		(function(exports, require, module, __filename, __dirname){
+			var greet = function() {console.log('Hello!');}
+			module.exports = greet;
+		});
+	then this function is called
+		fn(module.exports, require, module, filename, dirname);
+		return module.exports;
+**if require(./greet) doesn't find a file with name greet.js, it looks for a folder named greet and in that folder looks for index.js
+require can also import json files
+require has global scope
+when we do a require(), VM caches the file for faster access in future
+calling the require function for same module/file again returns the cached/already fetched data
+revealing module pattern
+	//	greet.js
+		var greeting = 'Hello!';
+		module.exports.greet = () => {
+			console.log(greeting);
+		} //  the greeting variable can not be accessed directly from outside this module
+
+	//	app.js
+		var greet = require('./greet.js').greet;
+		greet(); 	//	this will have access to the var greeting but cannot modify the value anyhow
+
+ES6 uses a different way of exporting and importing modules.
+	//	greet.js
+		export function greet() { console.log('Hello World') }
+	//	app.js
+		import * as greetr from 'greet'
+function can also be called using FUNCTION.call() and FUNCTION.apply()
+create a separate file for events and import it where eventListeners are defined 
+creating prototype chain using Object.create(prototype)
+	var person = {fname: '', lname: '', greet: () => {console.log(this.fname, this.lname)}}
+	var john = Object.create(person);
+	john.fname = 'John';	john.lname = 'Doe';
+	john.greet();	// John Doe
+
+inheriting props and methods using util module
+	var EventEmitter = require('events');
+	var util = require('util');
+
+	function Greetr() { this.greeting = 'Hello World!'; }
+	util.inherits(Greetr, EventEmitter);	//	making all the methods and properties of EventEmitter available to the Greetr
+	
+	Greetr.prototype.greet = () => {
+		console.log(this.greeting);
+		this.emit('greet');	//	inherited from EventEmitter
+	}	
+
+	var greeter1 = new Greetr();
+	greeter1.on('greet', () => {console.log('Someone greeted!')})
+	greeter1.greet();
+babel takes the ES6 code and converts it to ES5 code which is widely supported unlike ES6
+ES6 - template literals, var name = 'Divyanshu', `Hello, my name is ${name}`
+function.call(arg) & function.apply(arg) :	the 'this' now refers to the arg
+	var obj = {
+		name:	'John Doe',
+		greet: 	(age, city) => { console.log(`Hello ${name} `)}
+	}
+	obj.greet();	or 	obj.greet.call({name:'Divyanshu Bhatnagar'}, age, city)
+	//	the only difference between call and apply is apply accepts arg as array
+	obj.greet();	or 	obj.greet.call({name:'Divyanshu Bhatnagar'}, [age, city])
+ES6 Classes that are extended from other classes are supposed to call super() before using this in constructor functions
+system events are handled on C++ core by a C library LIBUV
+LIBUV provides the EVENT-LOOP to NodeJS.
+there is only one thread that executes the javascript code and where the event loop is running
+LIBUV creates a thread pool with four threads to offload asynchronous work to. But today's operating systems already provide asynchronous interfaces for many I/O tasks and which are used by LIBUV whenever possible otherwise the threadpool
+Buffer is a spot in memory with intentionally given small size where a certain amount of data is received from the stream
+Stream is a small sequence of comparatively larger data
+character set is a set of characters like a-z that have a number representation like h:104 and this number representation is encoded into binary digits h:01101000
+utf-8 is character encoding scheme
+buffer stores data in binary form in heap memory, memory allocated and deallocated on runtime
+fs.readFileSync opens a file which resided in the system and contains binary data. fs also uses buffer internally. when a file is read, it is first loaded into buffer which returns the string back
+error-first callback : callback that takes error as its first parameter
+async fs.readFile also uses buffer, which takes memory. If a large number of users access the application at the same time which requires memory and hence could affect the performance. This is where Streams come to rescue
+streams bring in chunks, piece of data, via pipeline
+streams inherit EventEmitter like util.inherits(Stream, EE)
+createReadStream can be given a property of highWaterMark which denotes the size of the buffer we want in bytes (32*1024 = 32 bytes)
+pipes are available to the readable streams. They allow us to connect read and write streams and write the chunk read from the readable stream to the writable stream.
+there can be a number of readable and writable streams connected via pipe
+pipe is available to the readable streams and take writable streams as arg and return the writable streams
+we can pipe various streams at once like readable.pipe(duplex).pipe(duplexTwo).pipe(writable)
+gzip is an algorithm to compress files. Node provides a library 'zlib' to deal with gzips
+zlib.createGzip() is a transform stream like a duplex that receives the chunk, compresses the chunk and sends it forward. It can be used as readable.pipe(gzip).pipe(writable) which basically reads data from readable, compresses it and writes it to writable. This is called chaining.
+port is something that maps the incoming request to the appropriate application since a server may have many applications running
+HTTP is a set of rules for data that is being transferred on the web
+MIME stands for Multipurpose Internet Mail Extensions  - a standard for specifying the type of data being sent
+Node uses HTTP Parser to get req and res details
+http.createServer(function(req, res){}) res is a stream
+APIs accept and send data via HTTP and TCP/IP
+serialize - translating object/data into a format that can be stored or transferred
+SEMANTIC VERSIONING (SEMVER)
+	Major.Minor.Patch - 1.7.2
+	Patch is increased for bug fixes - your code works fine
+	Minor is increased when new features are added - your code works fine
+	Major is increased when big changes are made - your code may break
+In package.json,
+	^ in front of dependencies signifies that update the module if a minor or patch is changed but not for major change
+	~ means only update for patch changes and nothing else
+npm install automatically installs the dependencies mentioned in the package.json file
+--save adds the module to dependencies in package.json but --save-dev represent the dependencies that are required only during development but not to run the app
+npm update updates the dependencies in the package.json
+const app = express(), here express() is a function that returns a function with all the properties
+app.listen(proccess.env.PORT||3000) where env is the port set on server
+middleware is a piece of code that is run after the request and before the response
+app.use() allows to use a middleware
+app.use('/public', express.static(__dirname+'/public')); where express.static is a middleware
+middleware has a callback function called next() which has to be called in order to call the next middleware
+middlewares run in sequence as written
+ejs is a view engine
+app.use('view engine', 'ejs') which tells that we are using a view engine and ejs is the file extension for this template files
+express looks for view files by default in views folder
+render function is used to render views and it by default looks in the views folder
+res.render('index', {ID: req.params.id}) allows us to pass data to the views using {} as second param of res.render
+ejs requires us to write the js in <% %> and <%= %> for spitting out values like <%= ID %>
+to fetch get parameters we use res.query.paramName since the get parameters are itself query strings
+body-parser parses the post request body and fetches the post data
+var urlencodedParser = bodyParser.urlencoded({extended: false}) is to be added to parse the urlbody. It also allows us to parse json data
+now to be able to parse the request body we need to pass this urlencodedParser as a callback to the function handling the post requests
+	app.post('/login', urlencodedParser, (req, res) => {}) 
+	this allows us to get post data using req.body.paramName
+express-generator allows us to create a skeleton of a new project
+express.Router() allows us to add routes to an object and export it to be used in the app.js
+app.use('/user', users) allows us to handle any request to /user/ using the router described in users module. Any request made to routes described in users module will be treated as /users/anything
+	for example, we can create a different controller file for api name apiController.js which exports a function
+		module.exports = function(app) {
+			app.get('/', (req, res) => {})
+		}
+		Now, in app.js include this module say in apiController and call apiController(app). Now since objects in JS are passed by reference, this module adds routes to the app in app.js
+		we can also say app.use('/user', userController) now the requests handled in userController will by default be added /user/something 
+we can use mysql with node where each row is returned as js object
+mongolab: database-as-a-service
+mongoose allows us to connect to mongo, create a schema and a model
+stack is a combination of all the technologies used to build a software like MERN stack

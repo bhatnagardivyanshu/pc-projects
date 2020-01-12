@@ -1,0 +1,67 @@
+.env file contains all the configuration of our project which are passed to the global variable $_ENV
+values defined in env file can be accessed using the env helper
+	echo env('APP_NAME', 'defaultValue');
+
+FLOW OF THE APPLICATION
+
+	1.	All requests are directed to public/index.php by Apache/Nginx server which further loads the framework
+	2.	index.php loads the composer generated autoloader and then retrieves an instance of the Laravel application from bootstrap/app.php.
+	3.	The first action taken by Laravel is to create an instance of the application/service container.
+	4.	Next, the incoming request is sent to the HTTP kernel. It contains other bootstrappers that need to be run before handling the request. It also defines the middlewares that all requests must pass through before being handled by the application.
+	5.	Kernel Bootstrapping's most important part is to load the service providers that include database, validation, routing components etc.
+	6.	After loading the service providers, the request will be passed to the Router for dispatching which will further dispatch the request to a route/controller and run any middleware if present.
+
+Laravel Service Container is a tool for managing the class dependencies & performing the dependency injection.
+
+In config/app.php, there's an array 'Providers' that contains all the service providers that are loaded for our application.
+
+Route::match(['get', 'post'], $uri, $callback) can be used to match multiple routes.
+
+Route::any('foo', function(){}); can be used to match any route.
+
+Route::redirect('/here', '/there', 301); can be used to redirect to a URL.
+
+Route::view('/welcome', 'welcome', ['name' => 'Divyanshu Bhatnagar'])
+
+Creating laravel app using composer laravel new project_name
+
+--------------------  --------------------
+
+-------------------- ROUTING --------------------
+
+routes/web.php defines routes for web interface and are provided web middleware group (session, CSRF).
+routes/api.php are stateless and assigned api middleware group.
+Forms pointing to POST, PUT, DELETE Routes must have CSRF token
+Route::method('uri', $callback / Controller@action)	Simple route is defined like
+Route::match(['get', 'post'], 'uri', $callback)		To handle mutliple requests
+Route::redirect('/here', '/there')					Redirect Route using 
+Route::view('uri', 'viewName', $dataArray)			For routes only rendering the view use 
+Route::get('user/{id}', function($recievedId){})	Required Params
+Route::get('contact/{person?}', $callback)			Optional Params
+
+-------------------- BLADE --------------------
+
+Blade code is compiled into plain PHP.
+It is cached until modified.
+Hence adds zero overhead to our application.
+{{}} uses htmlspecialchars by default. To unescape do {!! $var !!}
+Provides json directive to do json_encode @json($result)
+Conditionals available are
+	@if()
+	@elseif()
+	@else
+	@endif
+	@unless-@endunless
+	@isset($count)
+	@empty($name)
+Loops available are
+	@for() - @endfor
+	@foreach() - @endforeach
+	@while() - @endwhile
+Comments (not included in HTML )are written as {{-- This is a Laravel Comment --}}
+To use custom php use php directives @php @endphp
+Include sub-views in views
+	@include('users.profile', ['some' => 'data'])
+	@includeIf('users.test', ['test' => 'test']) ->  include view if present
+	@includeWhen($isLoggedIn, 'users.profile', ['some' => 'data'])
+

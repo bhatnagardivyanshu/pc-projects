@@ -1,0 +1,5 @@
+list directory in a pretty way
+	dir /w 		shows two columns 
+	dir /w 	/p 	shows two columns with limited files
+
+execute two cmd commands using &&

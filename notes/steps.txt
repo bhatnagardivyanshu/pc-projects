@@ -1,0 +1,17 @@
+Add the htaccess file
+Change the default settings in config.php for base_url and default_file
+Configure the database
+Make Pages Controller to control the requests made for the pages.
+#	APPPATH is a constant that has the root path of the application
+#	base_url() returns the root path of the application. > has to be updated in autoloader
+#	show_404() returns a default 404 page.
+
+WATCH CONNECTION TO THE DATABASE 
+
+To use model in controller, the model has to be loaded first using autoload['model']
+
+---------------------------------------------------------------------------------------------------
+
+trim values
+check for empty
+comment

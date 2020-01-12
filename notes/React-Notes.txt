@@ -1,0 +1,229 @@
+Use live-server to serve your content and enable live-reloading
+	npm install live-server -g
+React and ReactDOM are available as global variables in console
+
+BABEL is used to transpile ES6 into ES5
+
+JSX  is actually converted to React.createElement() behind the scenes
+
+			var greet = <h1 id="welcome" > Hello User </h1>
+			React.createElement(
+				'h1',
+				{id: "welcome"}, // className, id, etc
+				'Hello User'
+			)
+
+ReactDOM.render(content, targetElement) renders the content to the html
+
+Functional components are faster
+
+Default Props can be applied using Componet.defaultProps = {
+	title: "Default Value"
+}
+
+Package.json gives details about the application and also defines dependencies required by our project.
+
+npm install fetches the information from the package.json and installs the dependencies required by the project
+
+npm install babel cli installs Command Line Interface that allows us to run Babel via CLI
+
+npm insall babel-preset-react and babel-preset-env allow us to use features like transform-react-jsx, syntax-jsx, etc to install babel cli and required presets
+
+npm command to run babel and transpile 
+
+			babel src/app.js --out-file=public/scripts/app.js --presets=env,react --watch
+			adding --watch to this command automatically transpiles the file whenever any change occurs
+
+We can add ( ) around jsx just for the sake of clarity
+
+			var greet = (
+				<div style={style}>
+					<h1>Indecision App</h1>
+					<p>This is a sample react app</p>
+				</div>
+			)
+
+Inline style in JSX is given using a JS object given to style property of the JSX element
+
+			let style = { fontFamily: "verdana", color: "white" }
+			<div style={style}></div>
+
+We write variables and expressions between {} in JSX
+
+			let pageHeading = "Indecision App";
+			<h1>{pageHeading}</h1>
+
+Make objects and use variables in the JSX to make things dynamic
+
+			let page = {
+				pageHeading	: "Indecision App",
+				desc 		: "This is a sample react app"
+			};
+			var greet = (
+				<div style={style}>
+					<h1>Page Heading: {page.pageHeading}</h1>
+					<p>Page Description: {page.desc}</p>
+				</div>
+			)
+
+We can not only write expressions but also JSX in {}
+
+	<h3> Location : {<span>{user.location}</span>} </h3> #if we write {<span>user.location</span>} it is gonna write user.location
+
+To render elements conditionally we need to use either ternary operator, logical operator or to create functions
+	
+	{user.name ? user.name : "Anonymous"} 			//	choose between two options
+
+	{user.age >= 20 && <h3> Age : user.age </h3>} 	//  display if a values exists
+	// true && "some text" returns "some text" whereas false && "some data" will return false
+
+	var getLocation = (location) => {
+		if(location){ return <h3> Location : {location} </h3> }
+	}
+	<div>
+		<h3> Name : {user.name} </h3>
+		<h3> Age  : {user.age} </h3>
+		{getLocation(user.location)}
+	</div> );
+
+Arrow functions are completely anonymous and hence are saved to variables
+
+Arrow functions automatically return and if have single statement in body can be written as
+	
+	const square = (x) => x * x; // automatically gonna return
+
+console.log(arguments) inside ES5 function returns all the arguments passed #doesn't support ES6 function
+
+this in ES6 function is not referenced to the current object and might pose problems. Use ES5 instead
+
+use funcionName() { } ES6 syntax in objects
+
+ReactDOM.render() takes care of rendering only those elements that are updated.
+
+( COULD BE FALSE )JSX {} doesn't support objects just because it doesn't know what you want to do with the object
+
+JSX prints array as if it used join
+	{[1,2,3,4,5,65,6]} is printed as 12345656. It basically breaks it into individual {1}{2}{3}{4}
+
+!!'anything' returns true or false on the basis of 'anything' here
+
+To call parent class method from a subclass, use super.methodName();
+
+Override parent class methods by redeclaring methods with the same name in child class
+
+When creating components with class, make constructor and render methods
+
+When a React Component created using class is to be rendered, it calls the method render(){} in the class 
+
+User components, the ones we create, have to have an Uppercase first letter <Header /> that is how React differentiates between html elements or User components i.e., uses our defined class for that component
+
+the best way to bind this to class methods is binding them in constructor
+	constructor(){
+		super();
+		this.handleClick = this.handleClick.bind(this);
+	}
+
+setting state can be done in two ways
+	1.	this.setState({
+			new object is passed to this function 
+		})
+	2.	this.setState((prevState) => {
+			return {
+				count: preState.count + 1
+			}
+		})
+		but we must not update the current state by changing the current state as we loose the previous state. We must copy the previous state, make changes to this copy and pass it to this function.
+		The 2nd way is preferred because of this reason. It makes a copy of the current statem update the copy and sets it as the current state
+
+if using arrow functions returning object can be a little tricky for shorthand method
+	const num = () => return {}
+	This will be treated as an object. To handle this, use () around the object. Like,
+	cons num = () => return ({})
+
+Lifecycle can only be used for Stateful components. Functional components do not have lifecycle.
+
+this.setState doesn't update the component immediately. It may delay the update. To update immediately or handle this delay either use setState((prevProps, callback)) or use ComponentDidUpdate
+
+ComponentDidUpdate(prevProps, prevState) gets triggered whenever the component is updated or removed
+
+Use localStorage for storing temporary data on the client's computer
+
+Webpack takes all the js files as input and give a single js file, conventionally called bundle.js, to be included. It can also transform files like ES6 to ES5 using babel internally
+
+scripts defined in package.json are run using npm run scripName
+
+Webpack takes a configuration file (js file) to know how to configure the project. This file has to be put in the root folder and be named "webpack.config.js".
+	
+	The config file takes various parameteres:
+		1.	Entry Point
+		2.	Output File = {
+				path: "",
+				filename: ""
+			}
+
+Files inside webpack maintain their own local scope. So, for instance, import './utils.js' won't let us use the function defined in the utils.js. We'll have to import the funciton like 
+	import { functionName } from './utils.js';
+Exporting from the file can be done in various ways. 
+	1.	Named exports - export { functionName } which has to be included using import { functionName } from './utils.js'
+	2.	Use export keyword to export the function or var to be exported. export const square = (x) => x*x;
+	3.	Using default export, which can be used one time only in a file. When a file is imported, this 	default function/var is exported and has to be assigned to a varible in the file importing this. It can also be called in two ways like other 2 methods
+		export default Person extends .. this cannot be used for exporting variables.
+		export {Person as default, Human}
+		import anyName from './file.js' 
+
+Loader in webpack allows us to customize the behaviour of webpack when loading a file. We need to install loaders and configure them in the webpack.config.js file.
+	For instance, adding babel-loader would transpile the js files to es5 and use the configuration specified in .babelrc file.
+
+Webpack.config.js file takes another propert, modules, to define loaders which would perform certain actions defined by us.
+
+Make a components folder and extract all the components to their respective files.
+
+Webpack dev server is similar to live-server. It is a little faster than live-server when working with webpack
+
+webpack-dev-server creates a bundle file, uses it from memory but not creates a physical file.
+
+ARROW FUNCTIONS DO NOT BIND THEIR OWN 'THIS' AND HENCE USE THE 'THIS' IN THEIR SCOPE.
+
+Using arrow functions to define methods in a class basically are class properties and don't bind their own 'this'
+
+babel-loader, webpack-loader, uses babel-core behind the scene
+
+use npm install react@version to install a specific version of a module
+
+SCSS and SASS are similar except for that SCSS uses curly braces and semicolons;
+
+SCSS can import partials (other scss files named as _filename) using @import 'filename' .css & _ are ignored when importing
+
+Use Normaliz.css that makes the app look similar in all the browsers
+
+react-router-dom wants us to create a single BrowserRouter component in which different routes using <route> are defined and this BrowserRouter is rendered by React.BrowserRouter can have a single child only.
+
+	<BrowserRouter>
+		<div>
+			<Route path="/" exact={true} component={ExpenseDashboardPage} />
+			<Route path="/create" component={AddExpensePage} />
+			<Route path="/edit" component={EditExpensePage} />
+			<Route path="/HELP" component={HelpExpensePage} />
+		</div>
+	</BrowserRouter>
+
+Use exact={true} to exactly match the path before rendering a component
+
+By default application uses server-side-routing, i.e., the requests made to urls like /home are looked for in the sever. But we want to handle this routing via React, the front-end. To enable this we have to tell the devServer to server index.html always. By adding historyApiFallback: true to webpack.config.js, under devServer, we tell the devServer to serve index.html for all the requests.
+
+Use Switch to match the defined routes and show 404 for the routes not defined. Switch stops and renders the first match found.
+
+Using anchor tags (<a>) cause page reloading when used for routing. To overcome this page reload use <Link to="/">Home</Link>
+
+To create a common Header on all pages create a component and add it as the first child to the div under BrowserRouter
+	<BrowserRouter>
+		<div>
+			<Header />
+			<Switch>
+				<Route path="/" exact={true} component={ExpenseDashboardPage} />
+				
+To get query strings in url use path="/users/:userID" which can be accessed	by props.match.params.userID
+
+Redux is a state-management javascript library that allows to track data changes
+
+Using Redux, we can REDUCE COMPLEXITY and MAKE COMPONENTS REUSABLE unlike without Redux where the components were dependent on the props they used to get from their parent components. 

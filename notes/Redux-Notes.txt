@@ -1,0 +1,94 @@
+1. Everything that changes from data to the UI is saved in a single javascript object called state or state tree.
+
+2. We can not alter or write to the state. Anytime we need to make a change to the state, we dispatch an action which is a plain js object describing the change. An action must have a TYPE property describing the type of the action.
+
+3. All of this is handled at least by a single function known as the Reducer Function. A Reducer Function makes a copy of the previous state, performs the changes required depending on the action called and returns the new state.
+
+	function ReducerFunctionOne = (prevState = 0, action) => {
+		switch(action.type){
+
+			case "INCREMENT":
+				return prevState+1;
+
+			case "DECREMENT":
+				return prevState-1;
+
+			default:
+				return prevState;
+
+		}
+		return newState;
+	}
+
+	ReducerFunctionOne(1, { type: "INCREMENT" });	// should return 2
+
+4.	We create a store using createStore function provided by the Redux and pass it a reducer function which tells us how the state is updated based on actions.
+
+5.	Every store has 3 main functions
+
+	i) 	store.getState()
+				returns the current state of the store
+
+	ii) store.dispatch({ type: 'INCREMENT' });
+				lets us dispatch actions to change the state of the application.
+
+	iii)store.subscribe(() => {
+			document.write(store.getState());
+		})
+				lets us register a callback that the store will call anytime an action has been dispatched
+
+6.	createStore function explaination
+
+		const createStore = (reducer) => {
+			let state;
+			let listeners = [];
+
+			const getState = () => state;
+
+			const dispatch = (action) => {
+				state = reducer(state, action);
+				listeners.forEach((listener) => listener());
+			}
+
+			const subscribe = (listener) => {
+				listeners.push(listener);
+			}
+
+			dispatch({});
+
+			return { getState, dispatch, subscribe };
+		}				
+
+7.	Using Redux for counter application
+	
+	i)	create a store and pass it's value as the value to be rendered.
+	ii) add two buttons and call store.dispatch({type: 'INCREMENT/DECREMENT'}) accordingly.
+	iii)subscribe the store to a function that renders the data.
+
+8.	To push an item to an array, use spread operator and 
+		return [...list, newElement]
+		or
+		list.concat(newElement);
+
+9.	To remove an item from an array, slice the array upto the index and concatenate the next half from index+1 
+		list.slice(0, index).concat(list.slice(index+1))
+		or
+		return [...list.slice(0, index), ...list(index+1)]
+
+10.	To increment the counter, break the array again using slice and increment the element on index
+		return [...list.slice(0, index), list[index]+1, ...list.slice(index+1)]
+
+11.	Make a copy of object and alter the details
+		let todo = {
+			name: 'Name',
+			completed: false
+		};
+
+		Object.assign({}, todo, {
+			completed: !todo.completed
+		})		// Passing the third argument wins and overrides the property in the todo.
+
+		return {
+		...todo,
+		complete: !todo.completed
+		}

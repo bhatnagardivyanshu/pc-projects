@@ -1,0 +1,39 @@
+createStore function takes a function as an argument and creates a store. Handle default state for this function
+	import {createStore} from 'react';
+	const store = createStore((state = {count: 0}) => {
+		return state;
+	})
+the store has a function getState() that returns the current state of the store.
+	console.log(store.getState());
+
+the store also has a function dispatch(action={}) that takes an object that defined the action to be fired.
+	the action is then passed to the reducer function that makes a copy of the current state, updates the state according to the action and returns this state
+
+the store has another option called subscribe(() => console.log(store.getState())) that takes a function as an argument and is invoked everytime an action is dispatched. 
+
+we can unsubscribe a function using the return value sent by the subscribe function in this way
+	const unsubscribe = store.subscribe(() => console.log());
+	unsubscribe();
+
+an action object has to have a type property used by the redux but then it can also have any other data to be sent with the action type.
+	store.dispatch({
+		type: 'INCREMENT',
+		incrementBy: 5
+	})
+
+destructuring
+
+	const person = {
+		name: 'Andrew', age: 26, location: 'Haryana'
+	}
+	1. rename 	: 	const { name: fname, age = 18 } = person;
+	2. default 	: 	console.log(`${fname}` is ${age});
+	3. combo	:	const {name: fname = "Anonymous", age } = person;
+
+instead of passion inline objects to dispatch function use action generators. The action generators are simple functions that would return the object with the specific action types.
+	const incrementCounter = () => {
+		return {
+			type: 'INCREMENT'
+		}
+	}
+	store.dispatch(incrementCounter());

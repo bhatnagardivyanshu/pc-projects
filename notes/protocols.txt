@@ -1,0 +1,15 @@
+IP stands for Internet Protocol which is basically a unique address of a machine. 
+	The clients and servers have their unique IP address which is required when making a connection so that a machine connects to another machine using its IP address
+
+HTTP/SMTP/FTP are just a way of structuring the information/data depending on the type of information/data.
+	HTTP for web, SMTP for email and FTP for files.
+
+HTTP stands for HyperText Transfer Protocol.
+	It is a set of rules and a format for data being sent using TCP/IP over the web.
+
+TCP stands for Trasmission Control Protocol which is how the data is sent.
+	It takes the information (HTTP, SMTP, FTP) and splits the information into pieces called packets and transfers these packets via socket from source to destination.
+	The information in the packet may itelf be defined via protocol i.e., HTTP, FTP, SMTP
+
+TCP/IP go hand in hand. Our OS has the ability to create a socket connection and make internet connection which can be used to send and receive information over TCP/IP.
+	Node uses this facility given by the OS

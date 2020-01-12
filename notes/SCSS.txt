@@ -1,0 +1,5 @@
+SCSS and SASS are similar except for that SCSS uses curly braces and semicolons and SASS doesn't.
+files to be imported are called partials and have _ in the beginning of their name.
+To import a file, use @import 'filename' where filename doesn't include the _ from the actual filename.
+variables are defined using $ just like PHP.
+SCSS provides us with various functions like darken(color, %).

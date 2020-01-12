@@ -1,0 +1,2 @@
+npm build - create the bundle.js usnig webpack
+npm run dev-server - run the dev server and run the application
